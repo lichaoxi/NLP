@@ -1,0 +1,13 @@
+ArrayList、LinkedList与HashSet、Trie-HashMap、Trie数组不是一个等级，
+ArrayList、LinkedList在时间还是内存上都远远大于HashSet、Trie-HashMap、Trie数组
+
+ArrayList、LinkedList比较：
+	时间：ArrayList > LinkedList，LinkedList胜出1倍多
+	内存：ArrayList < LinkedList，ArrayList胜出3倍
+
+HashSet、Trie-HashMap、Trie数组：
+	时间：HashSet < Trie-HashMap < Trie数组
+	内存：Trie-HashMap > HashSet > Trie数组，HashSet与Trie数组相接近
+综合：HashSet与Trie数组相接近
+
+TernarySearchTrie比Trie数组更好

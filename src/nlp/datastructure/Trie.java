@@ -1,4 +1,4 @@
-package nlp.test;
+package nlp.datastructure;
 
 import java.util.Collection;
 import java.util.List;

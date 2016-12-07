@@ -1,11 +1,11 @@
-package nlp.test;
+package nlp.datastructure;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class TrieV2 {  
-	private static class TrieNode{  
+public class TrieV3 {  
+	private static class TrieNode implements Comparable{  
         private char character;  
         private boolean terminal;  
         private TrieNode[] children = new TrieNode[0];  
@@ -27,13 +27,18 @@ public class TrieV2 {
         public Collection<TrieNode> getChildren() {  
             return Arrays.asList(children);              
         }  
+        /**
+         * 二分搜索算法
+         * 1.要求children数组有序(insert实现有序数组)2.节点类可比较(实现comparable借口)
+         * @param character
+         * @return
+         */
         public TrieNode getChild(char character) {  
-            for(TrieNode child : children){  
-                if(child.getCharacter() == character){  
-                    return child;  
-                }  
-            }  
-            return null;  
+            int index = Arrays.binarySearch(children, character);
+            if(index >= 0){
+            	return children[index];
+            }
+            return null;
         }          
         public TrieNode getChildIfNotExistThenCreate(char character) {  
             TrieNode child = getChild(character);  
@@ -44,9 +49,45 @@ public class TrieV2 {
             return child;  
         }  
         public void addChild(TrieNode child) {  
-            children = Arrays.copyOf(children, children.length+1);  
-            this.children[children.length-1]=child;  
+        	children = insert(children, child);
         }  
+        /** 
+         * 将一个字符追加到有序数组 
+         * @param array 有序数组 
+         * @param element 字符 
+         * @return 新的有序数字 
+         */  
+        private TrieNode[] insert(TrieNode[] array, TrieNode element){  
+            int length = array.length;  
+            if(length == 0){  
+                array = new TrieNode[1];  
+                array[0] = element;  
+                return array;  
+            }  
+            TrieNode[] newArray = new TrieNode[length+1];  
+            boolean insert=false;  
+            for(int i=0; i<length; i++){  
+                if(element.getCharacter() <= array[i].getCharacter()){  
+                    //新元素找到合适的插入位置  
+                    newArray[i]=element;  
+                    //将array中剩下的元素依次加入newArray即可退出比较操作  
+                    System.arraycopy(array, i, newArray, i+1, length-i);  
+                    insert=true;  
+                    break;  
+                }else{  
+                    newArray[i]=array[i];  
+                }  
+            }  
+            if(!insert){  
+                //将新元素追加到尾部  
+                newArray[length]=element;  
+            }  
+            return newArray;  
+        }
+		@Override
+		public int compareTo(Object o) {
+			return this.getCharacter() - (char)o;
+		}  
     }  
 	
     private final TrieNode ROOT_NODE = new TrieNode('/');  
@@ -99,9 +140,7 @@ public class TrieV2 {
         }  
         //设置终结字符，表示从根节点遍历到此是一个合法的词  
         node.setTerminal(true);  
-    }  
-    
-      
+    }       
     public void show(){  
         show(ROOT_NODE,"");  
     }  
@@ -116,7 +155,7 @@ public class TrieV2 {
         }  
     }  
     public static void main(String[] args){  
-        TrieV2 trie = new TrieV2();  
+        TrieV3 trie = new TrieV3();  
         trie.add("APDPlat");  
         trie.add("APP");  
         trie.add("APD");  
